@@ -5,6 +5,8 @@ import speech_recognition as sr
 import pyttsx3
 import numpy as np
 import os
+import scipy.io.wavfile as wavfile
+import matplotlib.pyplot as plt
 
 #Fikirler
 """
@@ -12,7 +14,7 @@ import os
 dosyasındaki bir komuta erişilip aktive edilecek.
 
 *Kullanıcı, robot ile sohbet sırasında konuştuğu şeylerden elimizde bulunan anahtar kelimeler eğer konuşma
-içindeki bir cümlede geçiyorsa o cümleyi tamamiyle alıp tutabiliriz. Bu sayede ilerdeki sohbetlerde bu
+içindeki bir cümlede geçiyorsa o cümleyi tamamiyle alıp tutabiliriz. Bu sayede ilerideki sohbetlerde bu
 verileri kullanarak müşteri memnuniyetini arttırabiliriz.
 
 *Bu tuttuğumuz cümlelerden yüzde 50'si dahi işe yarar veriler içerse yine de bize avantaj sağlar.
@@ -24,9 +26,9 @@ text2= """Selam, bana Akif Taşlı derler. Yaşım 22. İşçiyim. Tokat'da yaş
 text3= """Selam, ben Doktor Veysel. Yaşım 35. İşçiyim. Malatya'da yaşıyorum. Doğum tarihim 04.1989"""
 text4 = """Selam, ben Akman. Yaşım 58'dir. İşçiyim. Erzurum'da yaşıyorum. Doğum tarihim 06.08.1966"""
 text5 = """Selam, ben Hasan. 63 yaşındayım. İşçiyim. Çanakkale'da yaşıyorum. Doğum tarihim 2.10.1961. Yani 2 Ekim 1961 doğumluyum."""
-sample_text ="""Merhaba, ben Mehmet Kaya. 2015 yılında Sakarya Üniversitesi İnsan Kaynakları Yönetimi Bölümü’nden mezun oldum. 
-Üniversite eğitimim boyunca Migros ve n11.com başta olmak üzere birçok kurumda staj yaptım. 
-Stajyer pozisyonunda görev aldığım kurumlarda insan kaynakları planlaması, işe alım süreçleri ve bordrolama alanlarını öğrendim."""
+speech_text = """
+10 Haziran 2024'de düğünümüz var. Bunun ardından 4 Temmuz'da Kurtuluş Günü'nü kutlayacağız. 31 Ekim'de Cadılar Bayramı'nı unutma ve Aralık'da konferansımız var.
+"""
 
 #Text listesi
 texts = [text,text2, text3, text4, text5] # Ne zaman mikrofondan ses alınırsa bir metin değişkenine kaydedilip onu texts listesine eklenilecek.
@@ -70,6 +72,12 @@ tarihTemp = []
 duzensiz_tarihler = []
 tarihler = []
 
+#Key Memories Alanı - Bazı kalıplarla konuşmada geçen önemli anıları, önemli olayları yakalayacağız. 
+""" * https://regex101.com/r/vWbq5c/1 - Özel Günler
+    * https://regex101.com/r/MWQtAy/5 - Özel Gün/Ay/Yıl Formatı ve Özel Gün
+    * https://regex101.com/r/GIVneT/1 - Bayram Seyran Regex
+    * https://regex101.com/r/5kXvvf/3 - Combined
+"""
 # --- Çoklu ve birbirinden farklı metinlerde bulunan isimleri ayıklama fonksiyonu --- #
 
 def isimAyiklama():
@@ -220,56 +228,100 @@ def tarihAyiklama():
 
 r = sr.Recognizer()
 
+r.pause_threshold = 0.75
+frequency_list = []
+
 def speakTest(command):
     engine = pyttsx3.init()
     engine.say(command)
     engine.runAndWait()
 
+def createTextFile(name):
+    file = open(f"{name}.txt", "w")
+
+def saveSentence(source):
+    file.write(source)
+
+def closeTextFile(name):
+    pass
+
 class   index:
     i = 0
 
-r.energy_threshold = 1000
-r.pause_threshold = 0.5
-
-#Ters ses
+#Ters ses hipotezi : Eğer bir devre vasıtasıyla dışarı ortamdan gelen sesi alarak iç ortamda aynı sesin transpose edilmiş halini dışarıya verirsek iki simetrik ses birbirini sönümler. Bu sayede ortam sesi kesilir, asıl kaynağın sesi kalır.
 
 while(True):
     try:
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, duration = 0.5)
-            print("Dinleniliyor...")
+            #r.dynamic_energy_threshold = True 
+            print("Sizi dinliyorum...")
+            file = open("metin.txt", "w")
             audio = r.listen(source, phrase_time_limit= 5)
             metin = r.recognize_google(audio, language = "tr-TR", show_all = False)
-            #metin = metin.capitalize()
+            metin = metin.capitalize()
 
-            print(f"Bunu mu söylemek istediniz: {metin}")
+            print(f"Bunu mu söylemek istediniz? {metin}.")
             cevap = r.listen(source, phrase_time_limit= 5)
             cevap_metin = r.recognize_google(cevap, language = "tr-TR")
             cevap_metin = cevap_metin.capitalize()
+            print(cevap_metin)
             
             if len(metin)>0 and cevap_metin == "Evet":
-                print(f"Bunu söylediniz: {metin}")
-                #file.write(metin)
+                print(f"Bunu söylediniz: {metin}.")
+                file.write(metin)
                 speakTest(metin)
                 print("Konuşmaya devam etmek ister misiniz?")
                 cevap = r.listen(source, phrase_time_limit= 5)
                 cevap_metin = r.recognize_google(cevap, language= "tr-TR")
                 cevap_metin = cevap_metin.capitalize()
+                print(cevap_metin)
                 if len(metin)>0 and cevap_metin == "Evet":
                     continue
-                else:
-                    print("Konuşmadan çıkıyorsunuz.")
+                elif cevap_metin == "Hayır":
+                    print("Konuşmadan çıkıyorsunuz...")
+                    speakTest(metin)
+                    with open(f"microphone-results({index.i}).wav", "wb") as f: #Ses dosyası oluşturma
+                        f.write(audio.get_wav_data())
+
+                        sample_rate, data = wavfile.read(f"microphone-results({index.i}).wav")
+
+                        # Eğer stereo ise mono'ya çevir
+                        if len(data.shape) == 2:
+                            data = np.mean(data, axis=1)
+
+                        # Fourier dönüşümü ile frekans spektrumunu hesapla
+                        frequencies = np.fft.rfftfreq(len(data), 1/sample_rate)
+                        spectrum = np.abs(np.fft.rfft(data))
+
+                        # Maksimum frekansı bul
+                        max_freq_index = np.argmax(spectrum)
+                        max_freq = frequencies[max_freq_index]
+
+                        if max_freq>0 and max_freq<160:
+                            print("Ses kaynağı sol tarafta. Robot, konuşan bir yüz görene kadar sola doğru dön.")
+                        elif max_freq>=160:
+                            print("Ses kaynağı sağ tarafta. Robot konuşan bir yüz görene kadar sağa doğru dön.")
+                        #soldan 128
+                        #sağdan 247
+                        """
+                        Fs, aud = wavfile.read(f"microphone-results({index.i}).wav")
+                        first = aud[:int(Fs*125)]
+                        powerSpectrum, frequenciesFound, time, imageAxis = plt.specgram(first, Fs=Fs)
+                        plt.xlabel('Time(s)')
+                        plt.ylabel('Frequency(Hz)')
+                        plt.show()
+                        """
+                        index.i = index.i + 1
+                        
                     #file.write(metin)
-                    #file.close()
+                    file.close()
                     break
-                    
-                
             
             elif cevap_metin == "Hayır":
-                #file = open("metin.txt", "a")
                 continue
 
-        index.i = index.i + 1
+        
 
         """with open(f"microphone-results({index.i}).wav", "wb") as f: #Ses dosyası oluşturma
             f.write(audio.get_wav_data())     """ 

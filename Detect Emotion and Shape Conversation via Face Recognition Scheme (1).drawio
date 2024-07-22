@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" modified="2024-07-13T12:06:38.505Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="oywVLm3aePRUvloUgnvG" version="24.6.5" type="device">
+  <diagram name="Sayfa -1" id="jk7PJs51DcHvuGEAmMME">
+    <mxGraphModel dx="1247" dy="1505" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TziMe59vUYWPg42dqKrm-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-45" target="TziMe59vUYWPg42dqKrm-48">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="-720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-45" value="Start" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-827" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-51" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-48" target="TziMe59vUYWPg42dqKrm-50">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-48" value="Robot Detect Person" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-720" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-50" target="TziMe59vUYWPg42dqKrm-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-50" value="Robot Record Face of Detected Person" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-640" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-55" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-52" target="TziMe59vUYWPg42dqKrm-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-52" value="Face Pictures" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-57" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-54" target="TziMe59vUYWPg42dqKrm-56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-58" value="Happy" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-57">
+          <mxGeometry x="-0.1609" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-62" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-54" target="TziMe59vUYWPg42dqKrm-63">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="-390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-64" value="Frightened" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-62">
+          <mxGeometry x="-0.2613" relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-65" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-54" target="TziMe59vUYWPg42dqKrm-66">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="99.9565217391305" y="-320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-67" value="Anxious" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-65">
+          <mxGeometry x="-0.3727" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-54" value="Emotion Detection&lt;div&gt;If?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="-480" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-71" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-56" target="TziMe59vUYWPg42dqKrm-75">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="-230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-56" value="Robot makes enjoyful&amp;nbsp; introduce and conversation with person" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="-560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-59" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-54" target="TziMe59vUYWPg42dqKrm-60">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="-440" as="sourcePoint" />
+            <mxPoint x="200" y="-440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-61" value="Sad" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-59">
+          <mxGeometry x="-0.4797" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-72" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-60" target="TziMe59vUYWPg42dqKrm-75">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="-230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-60" value="Robot makes calmful introduce and conversation with person" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="-470" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-73" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-63" target="TziMe59vUYWPg42dqKrm-75">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="-230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-63" value="Robot makes conversation and introduce which is relaxing with person" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="-390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-74" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-66" target="TziMe59vUYWPg42dqKrm-75">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="-290" as="sourcePoint" />
+            <mxPoint x="400" y="-230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-66" value="Robot makes lightly funny introduce and conversation with person" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="-260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-77" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-75" target="TziMe59vUYWPg42dqKrm-76">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-78" value="Positive" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-77">
+          <mxGeometry x="-0.1063" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-80" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-75" target="TziMe59vUYWPg42dqKrm-54">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="-210" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="40" y="-170" />
+              <mxPoint x="40" y="-440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-81" value="Negative" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TziMe59vUYWPg42dqKrm-80">
+          <mxGeometry x="-0.1866" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-75" value="If person reply...?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="-250" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-83" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TziMe59vUYWPg42dqKrm-76" target="TziMe59vUYWPg42dqKrm-82">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-76" value="Robot continue to conversation same style" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="-400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TziMe59vUYWPg42dqKrm-82" value="Finish" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="375" y="-550" width="130" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

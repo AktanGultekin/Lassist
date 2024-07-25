@@ -1,12 +1,25 @@
+#<----------------------------------------------------------------------------REGEX LIBS------------------------------------------------------------------------------>
 import re
 import string
 from itertools import chain
+import sys
+#<------------------------------------------------------------------------VOICE RECOGNITION LIBS---------------------------------------------------------------------------->
 import speech_recognition as sr
-import pyttsx3
+#import pyttsx3
 import numpy as np
 import os
 import scipy.io.wavfile as wavfile
+from scipy.io.wavfile import write
 import matplotlib.pyplot as plt
+from math import log10
+import pyaudio
+#import time
+from pydub import AudioSegment
+from pydub.playback import play
+import sounddevice as sd
+import soundfile as sf
+import argparse
+#<-------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
 #Fikirler
 """
@@ -34,7 +47,6 @@ speech_text = """
 texts = [text,text2, text3, text4, text5] # Ne zaman mikrofondan ses alınırsa bir metin değişkenine kaydedilip onu texts listesine eklenilecek.
 
 text_from_audio = []
-
 
 #Tekli text için tekli patternler
 """
@@ -127,7 +139,6 @@ def isimAyiklama():
 #isimAyiklama() #Çalışıyor
 #print("\n")
 #<----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
 #<--- Çoklu ve birbirinden farklı metinlerde bulunan yaş bilgilerini ayıklama fonksiyonu --->#
 
 def yasAyiklama():
@@ -223,109 +234,122 @@ def tarihAyiklama():
 #tarihAyiklama()
 #print("\n")
 #<----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
 # Ses tanıma ve dosya işlemleri
 
-r = sr.Recognizer()
+#-Değişken ve Nesne Tanımlama
+recognizer = sr.Recognizer()
+p = pyaudio.PyAudio()
+filename = "muzik.wav"
+file = open("metin.txt", "w+")
+parser = argparse.ArgumentParser(add_help=False)
 
-r.pause_threshold = 0.75
-frequency_list = []
+#-Fonksiyonlar
+def select_microphone(index):
+   # Get the device info
+   device_info = p.get_device_info_by_index(index)
+   # Check if this device is a microphone (an input device)
+   if device_info.get('maxInputChannels') > 0:
+      print(f"Selected Microphone: {device_info.get('name')}")
+   else:
+      print(f"No microphone at index {index}")
 
-def speakTest(command):
+"""def speakTest(command):
     engine = pyttsx3.init()
     engine.say(command)
-    engine.runAndWait()
+    print(command)
+    engine.runAndWait()#ai modelinin cevabı dinlenecek kulaklık geldiğinde"""
 
-def createTextFile(name):
-    file = open(f"{name}.txt", "w")
+def deleteTestFiles(choose, filename = "recording", index= 0):
+    if choose == 1:
+        os.remove(f"{filename}{index}.wav")
 
-def saveSentence(source):
-    file.write(source)
+def listen_Recognize(source, time = None):
+    audio = recognizer.listen(source, phrase_time_limit= time)
+    text = recognizer.recognize_google(audio, language = "tr-TR")
+    text = text.capitalize()
+    return text
 
-def closeTextFile(name):
-    pass
+def createFile(filename = "metin", isPromptOpen = False):
+    file = open(f"{filename}.txt", "r")
+    if isPromptOpen == True:
+        print("File created successfully.")
 
-class   index:
-    i = 0
+def writeFile(text, filename = "metin", isPromptOpen = False):
+    file = open(f"{filename}.txt", "w")
+    file.write(text)
+    file.close()
+    if isPromptOpen == True:
+        print("Text wrote in file successfully.")
+
+def appendFile(text, filename = "metin", isPromptOpen = False):
+    file = open(f"{filename}.txt", "a")
+    file.write(f" {text}")
+    file.close()
+    if isPromptOpen == True:
+        print("Text appended in file successfully.")
+
+def readFile(filename = "metin", isPromptOpen = False):
+    file = open(f"{filename}.txt", "r")
+    file.read()
+    file.close()
+    if isPromptOpen == True:
+        print("Text readed from file successfully.")
+
+def createWavFile(filename, duration = 5, freq = 44100, channels = 2, index = 0):
+    freq = 44100
+    recording = sd.rec(int(duration* freq), samplerate= freq, channels= channels)
+    sd.wait()
+    write(f"{filename}{index}.wav", freq, recording)
+
+def process(text):
+    #Müzik çalınmaya başladıktan sonra terminal donuyor. Muhtemelen ilgili kütüphanelerden kaynaklı bir durum.
+    match text:
+        case "Müzik":
+            try:
+                data, fs = sf.read("muzik.wav", dtype="float32")
+                print("Müzik oynatılıyor")
+                sd.play(data, fs, loop = True)
+            except KeyboardInterrupt:
+                parser.exit('Müzik durduruldu.')
+            except Exception as e:
+                parser.exit(type(e).__name__ + ': ' + str(e))
+        
+        case 2:
+            pass
+
+        case "Çıkış":
+            print("İyi günler dilerim.")
+            appendFile(text, "metin")
+            createWavFile("recording", 5, 44100, 2, 0)
+            exit()
 
 #Ters ses hipotezi : Eğer bir devre vasıtasıyla dışarı ortamdan gelen sesi alarak iç ortamda aynı sesin transpose edilmiş halini dışarıya verirsek iki simetrik ses birbirini sönümler. Bu sayede ortam sesi kesilir, asıl kaynağın sesi kalır.
 
-while(True):
+# Görev, robotun aksiyon alırken aksiyonunu bölebilmek
+
+#print(sd.query_devices())
+select_microphone(2)#Stereo Mix seçildi
+
+while True:
     try:
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, duration = 0.5)
-            #r.dynamic_energy_threshold = True 
+            recognizer.adjust_for_ambient_noise(source, duration = 0.5)
             print("Sizi dinliyorum...")
-            file = open("metin.txt", "w")
-            audio = r.listen(source, phrase_time_limit= 5)
-            metin = r.recognize_google(audio, language = "tr-TR", show_all = False)
-            metin = metin.capitalize()
-
-            print(f"Bunu mu söylemek istediniz? {metin}.")
-            cevap = r.listen(source, phrase_time_limit= 5)
-            cevap_metin = r.recognize_google(cevap, language = "tr-TR")
-            cevap_metin = cevap_metin.capitalize()
-            print(cevap_metin)
+            createFile("metin")
+            text = listen_Recognize(source, 5)
             
-            if len(metin)>0 and cevap_metin == "Evet":
-                print(f"Bunu söylediniz: {metin}.")
-                file.write(metin)
-                speakTest(metin)
-                print("Konuşmaya devam etmek ister misiniz?")
-                cevap = r.listen(source, phrase_time_limit= 5)
-                cevap_metin = r.recognize_google(cevap, language= "tr-TR")
-                cevap_metin = cevap_metin.capitalize()
-                print(cevap_metin)
-                if len(metin)>0 and cevap_metin == "Evet":
-                    continue
-                elif cevap_metin == "Hayır":
-                    print("Konuşmadan çıkıyorsunuz...")
-                    speakTest(metin)
-                    with open(f"microphone-results({index.i}).wav", "wb") as f: #Ses dosyası oluşturma
-                        f.write(audio.get_wav_data())
-
-                        sample_rate, data = wavfile.read(f"microphone-results({index.i}).wav")
-
-                        # Eğer stereo ise mono'ya çevir
-                        if len(data.shape) == 2:
-                            data = np.mean(data, axis=1)
-
-                        # Fourier dönüşümü ile frekans spektrumunu hesapla
-                        frequencies = np.fft.rfftfreq(len(data), 1/sample_rate)
-                        spectrum = np.abs(np.fft.rfft(data))
-
-                        # Maksimum frekansı bul
-                        max_freq_index = np.argmax(spectrum)
-                        max_freq = frequencies[max_freq_index]
-
-                        if max_freq>0 and max_freq<160:
-                            print("Ses kaynağı sol tarafta. Robot, konuşan bir yüz görene kadar sola doğru dön.")
-                        elif max_freq>=160:
-                            print("Ses kaynağı sağ tarafta. Robot konuşan bir yüz görene kadar sağa doğru dön.")
-                        #soldan 128
-                        #sağdan 247
-                        """
-                        Fs, aud = wavfile.read(f"microphone-results({index.i}).wav")
-                        first = aud[:int(Fs*125)]
-                        powerSpectrum, frequenciesFound, time, imageAxis = plt.specgram(first, Fs=Fs)
-                        plt.xlabel('Time(s)')
-                        plt.ylabel('Frequency(Hz)')
-                        plt.show()
-                        """
-                        index.i = index.i + 1
-                        
-                    #file.write(metin)
-                    file.close()
-                    break
+            print(f"Bunu mu söylemek istediniz? {text}.")
+            text = listen_Recognize(source, 5)
+            print(text)
             
-            elif cevap_metin == "Hayır":
-                continue
+            if text == "Evet":
+                print(f"Bunu söylediniz: {text}.")
+                file.write(text)
+                process(text)       
+                    
+            elif text == "Hayır":
+                print("Diyeceğinizi tekrar söyler misiniz?")
 
-        
-
-        """with open(f"microphone-results({index.i}).wav", "wb") as f: #Ses dosyası oluşturma
-            f.write(audio.get_wav_data())     """ 
-            
     except sr.RequestError as e:
         print("Could not request results; {0}".format(e))
 
@@ -334,121 +358,13 @@ while(True):
 
     except KeyboardInterrupt:
         print("Mikrofon kapatıldı.")
-        #os.remove("metin.txt")
+        """if os.path.exists('output.wav'):
+            os.remove('output.wav')"""
         #file.close()
-        exit()
+        sys.exit()
 
     except UnicodeEncodeError:
-        continue
-
-"""
-def transcribe_audio(path):
-    with sr.AudioFile(path) as source:
-        audio_listened = r.record(source)
-        text = r.recognize_google(audio_listened, language = "en-US")
-    return text
-
-def get_large_audio_transcription_on_silence(path):
-    # open the audio file using pydub
-    sound = AudioSegment.from_file(path)  
-    # split audio sound where silence is 500 miliseconds or more and get chunks
-    chunks = split_on_silence(sound,
-        # experiment with this value for your target audio file
-        min_silence_len = 500,
-        # adjust this per requirement
-        silence_thresh = sound.dBFS-14,
-        # keep the silence for 1 second, adjustable as well
-        keep_silence=500,
-    )
-    folder_name = "audio-chunks"
-    # create a directory to store the audio chunks
-    if not os.path.isdir(folder_name):
-        os.mkdir(folder_name)
-    whole_text = ""
-    # process each chunk 
-    for i, audio_chunk in enumerate(chunks, start=1):
-        # export audio chunk and save it in
-        # the `folder_name` directory.
-        chunk_filename = os.path.join(folder_name, f"chunk{i}.wav")
-        audio_chunk.export(chunk_filename, format="wav")
-        # recognize the chunk
-        try:
-            text = transcribe_audio(chunk_filename)
-        except sr.UnknownValueError as e:
-            print("Error:", str(e))
-        else:
-            text = f"{text.capitalize()}. "
-            print(chunk_filename, ":", text)
-            whole_text += text
-    return whole_text
-
-path = "7601-291468-0006.wav"
-print("\nFull text:", get_large_audio_transcription_on_silence(path))
-"""
-
-
-
-
+        print("Türkçe karakter sorunu.")
+        
+#Büyük boyuttaki ses dosyasını işleyebilmek için parçalara ayıran fonksiyonlar
 #Metin dosyasındaki metin ile regex araması
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-x = re.findall(adPatterns[3], text)
-print(x) # Slicing yöntemi "Ben John Doe" kalıbıyla verildiği için 4: olarak kullanıldı.
-x[0] = x[0][4:]
-print(x[0])
-
-print("\n")
-
-x= re.findall(yas, text)
-print(x)
-yas = x[0] # Yaş verisi listeden çıkarıldı.
-yas = yas.split() # Veri, içerdiği boşluk karakteriyle ayrıldı. Bu sayede yaş verisi salt haliyle elde edildi.
-print(yas) #Kümede gözüken hali
-yas = yas[0]#yas degiskenine yas verisi verildi.
-print(yas)#Yaşa ulaşıldı.
-
-print("\n")
-
-x = re.findall(yasadigiYer, text)
-il = x[0]
-sehir = il[0]
-print(sehir)
-ikametgah, b= sehir.split("'")
-print(ikametgah)
-
-print("\n")
-
-x = re.findall(tarih, text)
-print(x)
-dogumTarihi = x[0] #Doğum tarihi verisinin kümede gözüken hali
-print(dogumTarihi)#Doğum Tarihine ulaşıldı.
-
-print("\n")
-
-print("Konuşmadaki kişinin ismi ve soyismi: {}, yaşı: {},\nyaşadığı yer: {}, doğum tarihi: {} ".format(isimSoyisim, yas, yasadigiYer, dogumTarihi))"""
